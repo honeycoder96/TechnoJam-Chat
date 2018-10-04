@@ -1,0 +1,26 @@
+package tech.honeysharma.techbmechat.Chat;
+
+/**
+ * Created by Honey Sharma.
+ */
+
+public class Friends {
+
+    public String date;
+
+    public Friends(){
+
+    }
+
+    public Friends(String date) {
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+}
