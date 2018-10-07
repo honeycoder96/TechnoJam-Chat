@@ -13,6 +13,8 @@ public class Users {
 
 
 
+
+
     public Users(){
 
     }
@@ -22,7 +24,12 @@ public class Users {
         this.image = image;
         this.status = status;
         this.thumb_image = thumb_image;
+
+
     }
+
+
+
 
     public String getName() {
         return name;
