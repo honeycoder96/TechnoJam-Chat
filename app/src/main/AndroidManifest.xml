@@ -43,7 +43,8 @@
         <activity
             android:name=".Chat.ChatActivity"
             android:parentActivityName=".Account.MainActivity" />
-        <activity android:name=".Blog.BlogActivity" />
+        <activity android:name=".Blog.BlogActivity"
+            android:parentActivityName=".Account.MainActivity"/>
         <activity android:name=".Blog.PostActivity"></activity>
     </application>
 
