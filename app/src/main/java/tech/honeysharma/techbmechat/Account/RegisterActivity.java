@@ -2,6 +2,7 @@ package tech.honeysharma.techbmechat.Account;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthResult;
@@ -44,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     //Firebase Auth
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if(!TextUtils.isEmpty(display_name) || !TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)){
 
+                    SharedPreferences sharedPreferences = getSharedPreferences("APP_PREF", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("name", email);
+                    editor.apply();
                     register_user(display_name, email, password);
                 }
 
@@ -113,7 +120,8 @@ public class RegisterActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
 
                     mRegProgress.dismiss();
-                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                   user = FirebaseAuth.getInstance().getCurrentUser();
+
 
 
                     user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -122,52 +130,22 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                              mRegProgress.dismiss();
                              Toast.makeText(RegisterActivity.this, "Verification link has been sent to " + mEmail.getEditText().getText().toString() , Toast.LENGTH_SHORT).show();
-
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
-
-                            String device_token = FirebaseInstanceId.getInstance().getToken();
-
-                            HashMap<String, String> userMap = new HashMap<>();
-                            userMap.put("name", mDisplayName.getEditText().getText().toString());
-                            userMap.put("status", "Hi there I'm using TechnoJam Chat App.");
-                            userMap.put("image", "default");
-                            userMap.put("thumb_image", "default");
-                            userMap.put("device_token", device_token);
-
-                            mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-
-                                    if(task.isSuccessful()){
-
-                                        Log.e("RegisterActivity", "onComplete: Data added to db");
-                                      /**  Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(mainIntent);
-                                        finish(); */
-                                    }
-                                }
-                            });
-
-                              mAuth.signOut();
                         }
                     }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mRegProgress.dismiss();
+                            Log.e("RegisterActivity", "onFailure: " + e.getMessage());
+                        }
                     });
 
-                //    if (user.isEmailVerified()) {
-
-
-
-                 //   } else {
-
-
-
-                   // }
-
-
-
                 }
-
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Register", "onFailure: " + e.getMessage());
             }
         });
 
