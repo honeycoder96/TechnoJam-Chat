@@ -8,11 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -20,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.HashMap;
 
 import tech.honeysharma.techbmechat.R;
 
@@ -94,41 +98,84 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser(String email, String password) {
 
 
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if(task.isSuccessful()){
+                    if(task.isSuccessful()){
 
-                    mLoginProgress.dismiss();
+                        mLoginProgress.dismiss();
 
-                    String current_user_id = mAuth.getCurrentUser().getUid();
-                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                        String current_user_id = mAuth.getCurrentUser().getUid();
+                        String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                    mUserDatabase.child(current_user_id).child("device_token").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-
-                            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(mainIntent);
-                            finish();
+                        if (mAuth.getCurrentUser().isEmailVerified()) {
 
 
+                         //   mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
+
+                            String device_token = FirebaseInstanceId.getInstance().getToken();
+
+                            HashMap<String, String> userMap = new HashMap<>();
+                            userMap.put("name", getSharedPreferences("APP_PREF", MODE_PRIVATE).getString("name", null));
+                            userMap.put("status", "Hi there I'm using TechnoJam Chat App.");
+                            userMap.put("image", "default");
+                            userMap.put("thumb_image", "default");
+                            userMap.put("device_token", device_token);
+
+                            Log.e("A", "onComplete: ");
+
+                            mUserDatabase.child(mAuth.getCurrentUser().getUid()).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                    Log.e("B", "onComplete: ");
+                                    if(task.isSuccessful()){
+
+                                        Log.e("C", "onComplete: is Successfull");
+                                        Log.e("RegisterActivity", "onComplete: Data added to db");
+                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(mainIntent);
+                                        finish();
+                                        /**  Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                                         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                         startActivity(mainIntent);
+                                         finish(); */
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("D", "onFailure: " + e.getMessage());
+                                }
+                            });
+
+
+
+                        } else {
+
+                            Toast.makeText(LoginActivity.this, "Account not verified yet! Unable to Login!", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                } else {
 
-                    mLoginProgress.hide();
 
-                    String task_result = task.getException().getMessage().toString();
+                    } else {
 
-                    Toast.makeText(LoginActivity.this, "Error : " + task_result, Toast.LENGTH_LONG).show();
+                        mLoginProgress.hide();
+
+                        String task_result = task.getException().getMessage().toString();
+
+                        Toast.makeText(LoginActivity.this, "Error : " + task_result, Toast.LENGTH_LONG).show();
+
+                    }
 
                 }
+            });
 
-            }
-        });
+
+
+
+
 
 
     }
