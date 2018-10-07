@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,6 +57,10 @@ public class BlogActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("TechbMe Chat");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
 
 
         auth = FirebaseAuth.getInstance();
@@ -219,6 +224,10 @@ public class BlogActivity extends AppCompatActivity {
 
         }
 
+        if (item.getItemId() == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+        }
+
         return true;
     }
 
@@ -333,4 +342,10 @@ public class BlogActivity extends AppCompatActivity {
             snackbar.show();
         }
     }
+
+
+
+
+
+
 }
