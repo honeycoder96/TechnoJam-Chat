@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +41,7 @@ import tech.honeysharma.techbmechat.Utility.Utility;
 public class BlogActivity extends AppCompatActivity {
 
     private RecyclerView mBlogList;
+    private LinearLayoutManager mLayoutManager;
     private Toolbar mToolbar;
     private DatabaseReference mDatabase,mDatabaseUser,mDatabaseLike;
     private DatabaseReference mUserRef;
@@ -84,7 +86,10 @@ public class BlogActivity extends AppCompatActivity {
 
         mBlogList=(RecyclerView)findViewById(R.id.blog_list);
         mBlogList.setHasFixedSize(true);
-        mBlogList.setLayoutManager(new LinearLayoutManager(this));
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+        mBlogList.setLayoutManager(mLayoutManager);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
