@@ -1,9 +1,12 @@
 package tech.honeysharma.techbmechat.Blog;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -12,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,9 +30,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import tech.honeysharma.techbmechat.Account.MainActivity;
 import tech.honeysharma.techbmechat.Account.SettingsActivity;
@@ -46,6 +56,9 @@ public class BlogActivity extends AppCompatActivity {
     private FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     private ProgressDialog mProgress;
     private FirebaseAuth auth;
+
+    private List<Blog> blogList = new ArrayList<>();
+    private List<Blog> blogs = new ArrayList<>();
 
     private boolean mProcessLike=false;
 
@@ -110,9 +123,24 @@ public class BlogActivity extends AppCompatActivity {
 
 
             @Override
-            protected void populateViewHolder(BlogViewHolder viewHolder, Blog model, int position) {
+            protected void populateViewHolder(final BlogViewHolder viewHolder, final Blog model, final int position) {
+
+
 
                 final String post_key = getRef(position).getKey();
+
+
+
+                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(model.getUid())) {
+
+                    viewHolder.deleteIcon.setVisibility(View.VISIBLE);
+
+                } else {
+                    viewHolder.deleteIcon.setVisibility(View.INVISIBLE);
+                }
+
+
+
 
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setDesc(model.getDesc());
@@ -126,6 +154,15 @@ public class BlogActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Toast.makeText(BlogActivity.this, "Post Clicked", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
+                viewHolder.deleteIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        showAlertDialog(viewHolder, position, model);
 
                     }
                 });
@@ -164,6 +201,62 @@ public class BlogActivity extends AppCompatActivity {
         };
 
         mBlogList.setAdapter(firebaseRecyclerAdapter);
+    }
+
+    private void showAlertDialog(final BlogViewHolder viewHolder, final int position, final Blog model) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(BlogActivity.this);
+        builder.setTitle("Delete Blog");
+        builder.setMessage("Are you sure you want to delete this blog?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                Log.e("BlogActivity", "onClick: ");
+
+                Query query = FirebaseDatabase.getInstance().getReference().child("Blog");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        for(DataSnapshot singlesnapshot : dataSnapshot.getChildren()) {
+
+                             String key = singlesnapshot.getKey();
+
+                            Log.e("BlogActivity", "onDataChange: Model UID: " + model.getUid());
+                            Log.e("BlogActivity", "onDataChange: Model title: " + model.getTitle());
+                            Log.e("BlogActivity", "onDataChange: Model desc: " + model.getDesc());
+
+                             if (model.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                     && model.getTitle().equals(singlesnapshot.getValue(Blog.class).getTitle())
+                                     && model.getDesc().equals(singlesnapshot.getValue(Blog.class).getDesc())) {
+
+                                 FirebaseDatabase.getInstance().getReference().child("Blog").child(key).removeValue();
+
+                             }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("BlogActivity", "onCancelled: " + databaseError.getMessage());
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.dismiss();
+
+            }
+        });
+        builder.show();
+
     }
 
     @Override
@@ -242,9 +335,10 @@ public class BlogActivity extends AppCompatActivity {
     public static class BlogViewHolder extends RecyclerView.ViewHolder{
 
         View mview;
-        TextView post_uname,post_date,liketext;
+        TextView post_uname,post_date,liketext, post_title, post_desc;
 
         ImageButton mLikebtn;
+        ImageView deleteIcon;
 
         DatabaseReference mDatabaseLike;
         FirebaseAuth mAuth;
@@ -260,6 +354,10 @@ public class BlogActivity extends AppCompatActivity {
 
             mLikebtn=(ImageButton)mview.findViewById(R.id.likeimg);
             liketext=(TextView)mview.findViewById(R.id.liketext);
+            post_title=(TextView)mview.findViewById(R.id.post_title);
+            post_desc=(TextView)mview.findViewById(R.id.post_desc);
+
+            deleteIcon = mview.findViewById(R.id.delete_icon);
 
             post_uname= (TextView) mview.findViewById(R.id.post_uname);
             post_date= (TextView) mview.findViewById(R.id.post_date);
@@ -301,14 +399,14 @@ public class BlogActivity extends AppCompatActivity {
         }
 
         public void setTitle(String title){
-            TextView post_title=(TextView)mview.findViewById(R.id.post_title);
+           // TextView post_title=(TextView)mview.findViewById(R.id.post_title);
             post_title.setText(title);
         }
 
 
         public void setDesc(String desc){
-            TextView post_title=(TextView)mview.findViewById(R.id.post_desc);
-            post_title.setText(desc);
+          //  TextView post_title=(TextView)mview.findViewById(R.id.post_desc);
+            post_desc.setText(desc);
         }
 
         public void setImage(Context ctx, String image){
