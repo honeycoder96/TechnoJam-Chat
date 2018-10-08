@@ -6,18 +6,19 @@ package tech.honeysharma.techbmechat.Blog;
 
 public class Blog {
 
-    private String image, title, desc, username, Date;
+    private String image, title, desc, username, Date, uid;
 
     public Blog() {
 
     }
 
-    public Blog(String image, String title, String desc, String username, String date) {
+    public Blog(String image, String title, String desc, String username, String date, String uid) {
         this.image = image;
         this.title = title;
         this.desc = desc;
         this.username = username;
         Date = date;
+        this.uid = uid;
     }
 
     public String getImage() {
@@ -58,5 +59,13 @@ public class Blog {
 
     public void setDate(String date) {
         Date = date;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
