@@ -7,13 +7,19 @@
     android:background="@color/colorPrimaryDark"
     tools:context="tech.honeysharma.techbmechat.Account.SettingsActivity">
 
+    <include
+        android:id="@+id/status_appBar1"
+        layout="@layout/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/settings_image"
         android:layout_width="170dp"
         android:layout_height="170dp"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/status_appBar1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="65dp"
         android:src="@drawable/default_avatar" />
 
     <TextView
