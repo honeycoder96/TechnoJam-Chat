@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -57,7 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Button mStatusBtn;
     private Button mImageBtn;
-
+    private Toolbar mToolbar;
 
     private static final int GALLERY_PICK = 1;
 
@@ -71,6 +72,11 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        mToolbar = (Toolbar) findViewById(R.id.status_appBar1);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Account Setting");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mDisplayImage = (CircleImageView) findViewById(R.id.settings_image);
         mName = (TextView) findViewById(R.id.settings_name);
@@ -293,7 +299,7 @@ public class SettingsActivity extends AppCompatActivity {
                     .placeholder(R.drawable.default_avatar).into(mDisplayImage, new Callback() {
                 @Override
                 public void onSuccess() {
-
+                    Toast.makeText(SettingsActivity.this,"Changed Successfully",Toast.LENGTH_LONG).show();
                 }
 
                 @Override

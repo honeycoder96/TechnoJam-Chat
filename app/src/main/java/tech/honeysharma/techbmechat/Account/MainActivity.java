@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("TechbMe Chat");
+        getSupportActionBar().setTitle("TechnoJam");
 
         if (mAuth.getCurrentUser() != null) {
 

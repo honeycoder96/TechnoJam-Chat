@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     SharedPreferences sharedPreferences = getSharedPreferences("APP_PREF", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("name", email);
+                    editor.putString("name", display_name);
                     editor.apply();
                     register_user(display_name, email, password);
                 }
