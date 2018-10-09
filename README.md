@@ -1,6 +1,6 @@
 ## Greetings From TechnoJam and DSC Club
 
-### Note: *You will need the google-services.json file to work with the project, so join the below described channels to get started*
+### Note: *As many users new to firebase were facing issue without the google-services.json file, the file has now been added to the project directory.*
 
 
 ### An android application build using Google Firebase
