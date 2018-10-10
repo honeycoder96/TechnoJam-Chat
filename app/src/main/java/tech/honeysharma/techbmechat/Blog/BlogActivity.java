@@ -65,7 +65,8 @@ public class BlogActivity extends AppCompatActivity {
     private boolean mProcessLike=false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog);
 
@@ -445,10 +446,4 @@ public class BlogActivity extends AppCompatActivity {
             snackbar.show();
         }
     }
-
-
-
-
-
-
 }

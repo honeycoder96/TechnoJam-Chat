@@ -19,7 +19,7 @@
         android:layout_height="170dp"
         android:layout_below="@+id/status_appBar1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="23dp"
         android:src="@drawable/default_avatar" />
 
     <TextView
@@ -62,6 +62,33 @@
         android:text="CHANGE IMAGE"
         android:textColor="@color/colorPrimary" />
 
+    <Button
+        android:id="@+id/settings_delete_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/settings_image_btn"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/search_layout"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:paddingLeft="25dp"
+        android:layout_margin="10dp"
+        android:paddingRight="25dp"
+        android:text="DELETE ACCOUNT"
+        android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:id="@+id/settings_password_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/settings_delete_btn"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/search_layout"
+        android:backgroundTint="@android:color/holo_green_dark"
+        android:paddingLeft="25dp"
+        android:layout_margin="10dp"
+        android:paddingRight="25dp"
+        android:text="Change Password"
+        android:textColor="@color/colorPrimary" />
     <TextView
         android:id="@+id/settings_status"
         android:layout_width="wrap_content"
