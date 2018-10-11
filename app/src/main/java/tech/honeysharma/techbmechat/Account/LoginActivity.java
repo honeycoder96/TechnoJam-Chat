@@ -112,44 +112,55 @@ public class LoginActivity extends AppCompatActivity {
                         if (mAuth.getCurrentUser().isEmailVerified()) {
 
 
-                         //   mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
+                            if (!TextUtils.isEmpty(getSharedPreferences("APP_PREF", MODE_PRIVATE).getString("name", null))) {
 
-                            String device_token = FirebaseInstanceId.getInstance().getToken();
+                                //   mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
 
-                            HashMap<String, String> userMap = new HashMap<>();
-                            userMap.put("name", getSharedPreferences("APP_PREF", MODE_PRIVATE).getString("name", null));
-                            userMap.put("status", "Hi there I'm using TechnoJam Chat App.");
-                            userMap.put("image", "default");
-                            userMap.put("thumb_image", "default");
-                            userMap.put("device_token", device_token);
+                                String device_token = FirebaseInstanceId.getInstance().getToken();
 
-                            Log.e("A", "onComplete: ");
+                                HashMap<String, String> userMap = new HashMap<>();
+                                userMap.put("name", getSharedPreferences("APP_PREF", MODE_PRIVATE).getString("name", null));
+                                userMap.put("status", "Hi there I'm using TechnoJam Chat App.");
+                                userMap.put("image", "default");
+                                userMap.put("thumb_image", "default");
+                                userMap.put("device_token", device_token);
 
-                            mUserDatabase.child(mAuth.getCurrentUser().getUid()).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                Log.e("A", "onComplete: ");
 
-                                    Log.e("B", "onComplete: ");
-                                    if(task.isSuccessful()){
+                                mUserDatabase.child(mAuth.getCurrentUser().getUid()).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
 
-                                        Log.e("C", "onComplete: is Successfull");
-                                        Log.e("RegisterActivity", "onComplete: Data added to db");
-                                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(mainIntent);
-                                        finish();
-                                        /**  Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                                         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                         startActivity(mainIntent);
-                                         finish(); */
+                                        Log.e("B", "onComplete: ");
+                                        if(task.isSuccessful()){
+
+                                            Log.e("C", "onComplete: is Successfull");
+                                            Log.e("RegisterActivity", "onComplete: Data added to db");
+                                            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(mainIntent);
+                                            finish();
+                                            /**  Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                                             mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                             startActivity(mainIntent);
+                                             finish(); */
+                                        }
                                     }
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e("D", "onFailure: " + e.getMessage());
-                                }
-                            });
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e("D", "onFailure: " + e.getMessage());
+                                    }
+                                });
+
+                            } else {
+
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+
+
+
 
 
 
