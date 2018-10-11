@@ -1,6 +1,7 @@
 package tech.honeysharma.techbmechat.Account;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -95,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendToStart() {
 
+        SharedPreferences sharedPreferences = getSharedPreferences("APP_PREF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
         Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
         startActivity(startIntent);
         finish();
