@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "414078877163",
+    "firebase_url": "https://techbmechat.firebaseio.com",
+    "project_id": "techbmechat",
+    "storage_bucket": "techbmechat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414078877163:android:31712057c6e97a9e",
+        "android_client_info": {
+          "package_name": "tech.honeysharma.techbmechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414078877163-819rri18jole7ituijk2v6fniddcrc76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tech.honeysharma.techbmechat",
+            "certificate_hash": "b001cff861320416be7dce13fac9906ba3ffb8b8"
+          }
+        },
+        {
+          "client_id": "414078877163-sb3csp966gporgoljaaj00875u0ue4sp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDv5BYkFmc65gwmRrQ856BCJroqX7Ki0o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414078877163-sb3csp966gporgoljaaj00875u0ue4sp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

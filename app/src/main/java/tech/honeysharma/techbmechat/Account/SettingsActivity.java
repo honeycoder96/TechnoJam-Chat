@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -57,7 +59,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Button mStatusBtn;
     private Button mImageBtn;
-
+    private Button mDeleteBtn;
+    private Button mPasswordBtn;
+    private Toolbar mToolbar;
 
     private static final int GALLERY_PICK = 1;
 
@@ -72,12 +76,21 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mToolbar = (Toolbar) findViewById(R.id.status_appBar1);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Account Setting");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mDisplayImage = (CircleImageView) findViewById(R.id.settings_image);
         mName = (TextView) findViewById(R.id.settings_name);
         mStatus = (TextView) findViewById(R.id.settings_status);
 
         mStatusBtn = (Button) findViewById(R.id.settings_status_btn);
         mImageBtn = (Button) findViewById(R.id.settings_image_btn);
+
+        mDeleteBtn = (Button) findViewById(R.id.settings_delete_btn);
+
+        mPasswordBtn = (Button) findViewById(R.id.settings_password_btn);
 
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
@@ -116,7 +129,49 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        mDeleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+                user.delete()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    mUserDatabase.setValue(null);
+                                    Intent startIntent=new Intent(SettingsActivity.this,StartActivity.class);
+                                    startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(startIntent);
+                                }
+                            }
+                        });
+            }
+        });
+
+        mPasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final FirebaseAuth auth = FirebaseAuth.getInstance();
+                String emailAddress = mCurrentUser.getEmail();
+
+                auth.sendPasswordResetEmail(emailAddress)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    auth.signOut();
+                                    Intent startIntent=new Intent(SettingsActivity.this,StartActivity.class);
+                                    startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(startIntent);
+                                    Toast.makeText(getApplicationContext(),"Password Reset Link Send to your email",Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+            }
+        });
         mImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -291,7 +346,7 @@ public class SettingsActivity extends AppCompatActivity {
                     .placeholder(R.drawable.default_avatar).into(mDisplayImage, new Callback() {
                 @Override
                 public void onSuccess() {
-
+                    Toast.makeText(SettingsActivity.this,"Changed Successfully",Toast.LENGTH_LONG).show();
                 }
 
                 @Override
