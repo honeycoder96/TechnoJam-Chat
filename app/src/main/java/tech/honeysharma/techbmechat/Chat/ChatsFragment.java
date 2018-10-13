@@ -27,8 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import tech.honeysharma.techbmechat.Blog.BlogActivity;
-import tech.honeysharma.techbmechat.Blog.PostActivity;
 import tech.honeysharma.techbmechat.R;
 
 
