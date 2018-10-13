@@ -372,6 +372,4 @@ public class SettingsActivity extends AppCompatActivity {
         }
         return randomStringBuilder.toString();
     }
-
-
 }
