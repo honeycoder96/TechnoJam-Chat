@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -53,6 +54,8 @@ ListView ListViewRequest;
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String key = (String) dataSnapshot.getValue();
                 listofreq.add(key);
+                // get subchild of this key and then its sub child "type" and "from"
+                // find the key of "from" in "Users" node and get its name.
                 ListViewRequest.setAdapter(new Myadapter(getActivity(),listofreq));
 
             }
@@ -94,6 +97,22 @@ ListView ListViewRequest;
             view=inflater.inflate(R.layout.ticket_request,null);
            TextView tv=(TextView) view.findViewById(R.id.tv_name_ticket_req);
            tv.setText(user);
+           Button btn_reject=(Button) view.findViewById(R.id.btn_reject);
+           Button btn_accept=(Button) view.findViewById(R.id.btn_accept);
+           btn_accept.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   //when user ACCEPT request
+               }
+           });
+           btn_reject.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   //when user REJECT request
+
+               }
+           });
+
            return view;
        }
 
