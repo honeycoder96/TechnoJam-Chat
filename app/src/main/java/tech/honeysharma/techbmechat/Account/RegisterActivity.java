@@ -27,6 +27,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.HashMap;
 
 import tech.honeysharma.techbmechat.R;
+import tech.honeysharma.techbmechat.onboarding.BoardingActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -129,6 +130,9 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                              mRegProgress.dismiss();
                              Toast.makeText(RegisterActivity.this, "Verification link has been sent to " + mEmail.getEditText().getText().toString() , Toast.LENGTH_SHORT).show();
+                             Intent intent = new Intent(RegisterActivity.this, BoardingActivity.class);
+                             startActivity(intent);
+                             finish();
                         }
                     }
                     }).addOnFailureListener(new OnFailureListener() {
