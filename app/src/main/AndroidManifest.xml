@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="tech.honeysharma.techbmechat">
 
-
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -16,11 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Account.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Account.StartActivity" />
         <activity
@@ -29,7 +22,8 @@
         <activity
             android:name=".Account.LoginActivity"
             android:parentActivityName=".Account.StartActivity" />
-        <activity android:name=".Account.SettingsActivity"
+        <activity
+            android:name=".Account.SettingsActivity"
             android:parentActivityName=".Account.MainActivity" />
         <activity
             android:name=".Chat.StatusActivity"
@@ -44,9 +38,18 @@
         <activity
             android:name=".Chat.ChatActivity"
             android:parentActivityName=".Account.MainActivity" />
-        <activity android:name=".Blog.BlogActivity"
-            android:parentActivityName=".Account.MainActivity"/>
-        <activity android:name=".Blog.PostActivity"></activity>
+        <activity
+            android:name=".Blog.BlogActivity"
+            android:parentActivityName=".Account.MainActivity" />
+        <activity android:name=".Blog.PostActivity" />
+        <activity android:name=".onboarding.BoardingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
