@@ -13,11 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Account.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Account.StartActivity" />
         <activity
@@ -41,7 +36,14 @@
             android:name=".Chat.ChatActivity"
             android:parentActivityName=".Account.MainActivity" />
         <activity android:name=".Blog.BlogActivity" />
-        <activity android:name=".Blog.PostActivity"></activity>
+        <activity android:name=".Blog.PostActivity" />
+        <activity android:name=".Account.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
