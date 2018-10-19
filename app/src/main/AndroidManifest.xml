@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="tech.honeysharma.techbmechat">
 
-
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -29,7 +27,8 @@
         <activity
             android:name=".Account.LoginActivity"
             android:parentActivityName=".Account.StartActivity" />
-        <activity android:name=".Account.SettingsActivity"
+        <activity
+            android:name=".Account.SettingsActivity"
             android:parentActivityName=".Account.MainActivity" />
         <activity
             android:name=".Chat.StatusActivity"
@@ -44,9 +43,12 @@
         <activity
             android:name=".Chat.ChatActivity"
             android:parentActivityName=".Account.MainActivity" />
-        <activity android:name=".Blog.BlogActivity"
-            android:parentActivityName=".Account.MainActivity"/>
-        <activity android:name=".Blog.PostActivity"></activity>
+        <activity
+            android:name=".Blog.BlogActivity"
+            android:parentActivityName=".Account.MainActivity" />
+        <activity android:name=".Blog.PostActivity" />
+        <activity android:name=".onboarding.BoardingActivity">
+        </activity>
     </application>
 
 </manifest>

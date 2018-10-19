@@ -1,5 +1,6 @@
 package tech.honeysharma.techbmechat.Account;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
@@ -7,9 +8,11 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,6 +23,7 @@ import com.google.firebase.database.ServerValue;
 import tech.honeysharma.techbmechat.Blog.BlogActivity;
 import tech.honeysharma.techbmechat.Chat.UsersActivity;
 import tech.honeysharma.techbmechat.R;
+import tech.honeysharma.techbmechat.Utility.Utility;
 
 public class MainActivity extends AppCompatActivity {
 
