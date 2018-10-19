@@ -14,7 +14,7 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         cons_back= (ConstraintLayout) findViewById(R.id.const_layout);
-        cons_back.setBackgroundResource(R.drawable.splash_image);
+        cons_back.setBackgroundResource(R.drawable.technojam);
         Thread thread =new Thread(){
             @Override
             public void run() {

@@ -43,7 +43,7 @@
             android:name=".Blog.BlogActivity"
             android:parentActivityName=".Account.MainActivity" />
         <activity android:name=".Blog.PostActivity" />
-        <activity android:name=".onboarding.BoardingActivity">
+        <activity android:name=".onboarding.BoardingActivity"></activity>
 
         <activity android:name=".Account.Splash">
             <intent-filter>
