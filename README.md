@@ -1,5 +1,8 @@
 ## Greetings From TechnoJam and DSC Club
 
+
+### This repository is part of [Gof-2018](http://gof.technojam.tech) . Don't forget to register yourself before contributing.
+
 ### Note: *As many users new to firebase were facing issue without the google-services.json file, the file has now been added to the project directory.*
 
 
