@@ -16,7 +16,28 @@
 
 ### This is a list of awesome people who contributed to this repository
 
+```
+Instructions :
+
+- Add your detail after the person on the table (Contributors.md)
+
+- Don't Change the format of the table or modify someone else content.
+
+- In Case, you don't want to disclose your contact information.
+  No Problem, This place is just created to know people who are contributing to this repository.
+
+```
+
 #### 1. Contributors
+
+| S.no | Name | Country | Introduction | Contact |
+|------|:------|:---------|:--------------|:------------|
+| 1. | **Honey Sharma** | -  | | [GitHub](https://github.com/honeycoder96)|
+| 2. | **Mohak Gupta**  |-| | [GitHub](https://github.com/mohak1283) |
+| 3. | **Ankush Shrivastava** | - | | [GitHub](https://github.com/ankush-01) |
+| 4. | **Muh. Rahmatullah** | -  | | [GitHub](https://github.com/muhrahmatullah)|
+| 5. | **Maharaj Fawwaz Almuqaddim Yusran**  |-| | [GitHub](https://github.com/f4ww4z) |
+| 6. | **Vishnu Bochiwal** | - | | [GitHub](https://github.com/visnu-bochiwal) |
 
 #### All the best :)
 #### Lets do it open source way !!  
