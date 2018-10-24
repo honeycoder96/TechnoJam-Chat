@@ -12,7 +12,11 @@
 	1. All the developement is done in *Developement* branch. 
 	2. Make a new branch and create a pull request to the *Development* branch
 	3. Feel free to open any new issue.
-	4. If you want to work on any issue please specify first. 
+	4. If you want to work on any issue please specify first.
+
+### This is a list of awesome people who contributed to this repository
+
+#### 1. Contributors
 
 #### All the best :)
 #### Lets do it open source way !!  
