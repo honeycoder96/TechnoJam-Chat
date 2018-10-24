@@ -15,11 +15,11 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         if (position == 0) {
-            return new BlogsFragment();
-        } else if (position == 1) {
-            return new NewsFragment();
-        } else if (position == 2) {
             return new EventsFragment();
+        } else if (position == 1) {
+            return new BlogsFragment();
+        } else if (position == 2) {
+            return new NewsFragment();
         } else {
             return null;
         }
@@ -37,11 +37,11 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
         String title = "";
 
         if (position == 0) {
-            title = "Blogs";
-        } else if (position == 1) {
-            title = "News";
-        } else if (position == 2) {
             title = "Events";
+        } else if (position == 1) {
+            title = "Blog";
+        } else if (position == 2) {
+            title = "Tech News";
         }
         return title;
     }

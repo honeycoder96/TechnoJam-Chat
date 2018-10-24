@@ -39,6 +39,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import tech.honeysharma.techbmechat.Account.MainActivity;
 import tech.honeysharma.techbmechat.Account.SettingsActivity;
 import tech.honeysharma.techbmechat.Account.StartActivity;
 import tech.honeysharma.techbmechat.Chat.UsersActivity;
@@ -131,7 +132,6 @@ public class BlogActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-
 
         if(item.getItemId() == R.id.main_logout_btn){
 
