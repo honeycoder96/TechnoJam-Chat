@@ -13,8 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Account.MainActivity">
-        </activity>
+        <activity android:name=".Account.MainActivity"></activity>
         <activity android:name=".Account.StartActivity" />
         <activity
             android:name=".Account.RegisterActivity"
@@ -38,19 +37,20 @@
         <activity
             android:name=".Chat.ChatActivity"
             android:parentActivityName=".Account.MainActivity" />
-
         <activity
             android:name=".Blog.BlogActivity"
             android:parentActivityName=".Account.MainActivity" />
         <activity android:name=".Blog.PostActivity" />
-        <activity android:name=".onboarding.BoardingActivity"></activity>
-
+        <activity android:name=".onboarding.BoardingActivity" />
         <activity android:name=".Account.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Blog.DetailedNewsActivity"
+            android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
         </activity>
     </application>
 
