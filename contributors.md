@@ -17,15 +17,11 @@
 ### This is a list of awesome people who contributed to this repository
 
 ```
-Instructions :
-
+###### Instructions :
 - Add your detail after the person on the table (Contributors.md)
-
 - Don't Change the format of the table or modify someone else content.
-
 - In Case, you don't want to disclose your contact information.
   No Problem, This place is just created to know people who are contributing to this repository.
-
 ```
 
 #### 1. Contributors
