@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import tech.honeysharma.techbmechat.Blog.BlogActivity;
 import tech.honeysharma.techbmechat.R;
 
 public class Splash extends AppCompatActivity {
@@ -14,7 +15,8 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         cons_back= (ConstraintLayout) findViewById(R.id.const_layout);
-        cons_back.setBackgroundResource(R.drawable.technojam);
+        cons_back.setBackgroundResource(R.drawable.technojam
+        );
         Thread thread =new Thread(){
             @Override
             public void run() {

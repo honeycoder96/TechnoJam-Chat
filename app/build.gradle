@@ -51,6 +51,12 @@ dependencies {
 
     implementation 'com.github.msayan:tutorial-view:v1.0.6'
 
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    implementation 'com.github.bumptech.glide:okhttp3-integration:4.6.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

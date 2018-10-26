@@ -30,6 +30,7 @@ import com.squareup.picasso.Picasso;
 import tech.honeysharma.techbmechat.Blog.BlogActivity;
 import tech.honeysharma.techbmechat.Chat.UsersActivity;
 import tech.honeysharma.techbmechat.R;
+import tech.honeysharma.techbmechat.Utility.Utility;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -168,18 +169,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void sendToStart() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences("APP_PREF", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
-        startActivity(startIntent);
-        finish();
-
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -212,7 +201,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //
+    private void sendToStart() {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("APP_PREF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
+        startActivity(startIntent);
+        finish();
+
+    }
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 

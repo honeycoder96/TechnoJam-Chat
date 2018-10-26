@@ -25,6 +25,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.HashMap;
 
 import tech.honeysharma.techbmechat.R;
+import tech.honeysharma.techbmechat.Utility.StringUtils;
 
 
 /**
@@ -75,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email = mLoginEmail.getEditText().getText().toString();
                 String password = mLoginPassword.getEditText().getText().toString();
 
-                if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)){
+                if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && StringUtils.isEmailValid(email)){
 
                     mLoginProgress.setTitle("Logging In");
                     mLoginProgress.setMessage("Please wait while we check your credentials.");
@@ -84,7 +85,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     loginUser(email, password);
 
-                }
+                }else
+		{
+			//TODO error dialog
+		}	
 
             }
         });
