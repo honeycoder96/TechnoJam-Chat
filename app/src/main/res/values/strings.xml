@@ -13,4 +13,8 @@
     <string name="default_status">Hi there, I\'m using TechnoJam Chat App</string>
     <string name="searchtext">Search a user(Case Sensitive)</string>
     <string name="verify_email">Verify Email</string>
+
+
+    <string name="Open">Open</string>
+    <string name="Close">Close</string>
 </resources>

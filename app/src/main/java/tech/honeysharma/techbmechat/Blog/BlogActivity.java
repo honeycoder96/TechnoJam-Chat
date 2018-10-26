@@ -8,14 +8,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -32,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -48,23 +51,65 @@ public class BlogActivity extends AppCompatActivity {
     private RecyclerView mBlogList;
     private LinearLayoutManager mLayoutManager;
     private Toolbar mToolbar;
-    private DatabaseReference mDatabase,mDatabaseUser,mDatabaseLike;
+    private DatabaseReference mDatabase, mDatabaseUser, mDatabaseLike;
     private DatabaseReference mUserRef;
     private FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     private ProgressDialog mProgress;
     private FirebaseAuth auth;
 
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
+
+    private TextView tvuserName;
+    private ImageView ivUserImage;
+
     private List<Blog> blogList = new ArrayList<>();
     private List<Blog> blogs = new ArrayList<>();
 
-    private boolean mProcessLike=false;
+    private boolean mProcessLike = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog);
 
+        initViews();
+
+
+        auth = FirebaseAuth.getInstance();
+        mProgress = new ProgressDialog(this);
+
+        String uid = auth.getCurrentUser().getUid();
+
+
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Like");
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
+
+        if (auth.getCurrentUser() != null) {
+            mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid());
+            mUserRef.addValueEventListener(new ValueEventListener() {
+                //
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    setUserData(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        mDatabaseLike.keepSynced(true);
+
+    }
+
+    private void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("TechnoJam Chat");
@@ -72,28 +117,7 @@ public class BlogActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-
-
-        auth = FirebaseAuth.getInstance();
-        mProgress=new ProgressDialog(this);
-
-        String uid=auth.getCurrentUser().getUid();
-
-
-        mDatabaseUser= FirebaseDatabase.getInstance().getReference().child("Users");
-
-        mDatabaseLike=FirebaseDatabase.getInstance().getReference().child("Like");
-
-        mDatabase= FirebaseDatabase.getInstance().getReference().child("Blog");
-
-        if (auth.getCurrentUser()!=null)
-        {
-            mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid());
-        }
-
-        mDatabaseLike.keepSynced(true);
-
-        mBlogList=(RecyclerView)findViewById(R.id.blog_list);
+        mBlogList = (RecyclerView) findViewById(R.id.blog_list);
         mBlogList.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setReverseLayout(true);
@@ -102,15 +126,94 @@ public class BlogActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+            //
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(BlogActivity.this,PostActivity.class));
+                startActivity(new Intent(BlogActivity.this, PostActivity.class));
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 //      .setAction("Action", null).show();
             }
         });
+        drawerLayout = (DrawerLayout) findViewById(R.id.activity_main);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.Open, R.string.Close);
 
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        navigationView = findViewById(R.id.nv);
+        View view = navigationView.inflateHeaderView(R.layout.nav_header);
+        tvuserName = view.findViewById(R.id.tv_user_name);
+        ivUserImage = view.findViewById(R.id.iv_user_image);
+
+
+        setNavigationDrawer();
+    }
+
+    private void setUserData(DataSnapshot dataSnapshot) {
+
+        String name = dataSnapshot.child("name").getValue().toString();
+        final String image = dataSnapshot.child("image").getValue().toString();
+
+        tvuserName.setText(name);
+
+        if (!image.equals("default")) {
+
+            Picasso.with(this).load(image).networkPolicy(NetworkPolicy.OFFLINE)
+                    .placeholder(R.drawable.ic_account_circle_white_24dp).into(ivUserImage);
+
+        }
+    }
+
+    private void setNavigationDrawer() {
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            //
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.main_logout_btn:
+                        mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+
+                        FirebaseAuth.getInstance().signOut();
+                        sendToStart();
+                        break;
+                    case R.id.main_settings_btn:
+
+                        Intent settingsIntent = new Intent(BlogActivity.this, SettingsActivity.class);
+                        startActivity(settingsIntent);
+                        break;
+
+                    case R.id.main_all_btn:
+
+                        Intent settingIntent = new Intent(BlogActivity.this, UsersActivity.class);
+                        startActivity(settingIntent);
+                        break;
+                    case android.R.id.home:
+                        NavUtils.navigateUpFromSameTask(BlogActivity.this);
+                        break;
+                    default:
+                        return true;
+                }
+
+                return true;
+            }
+        });
+    }
+
+    private void sendToStart() {
+
+        Intent startIntent = new Intent(BlogActivity.this, StartActivity.class);
+        startActivity(startIntent);
+        finish();
+
+    }
+
+    @Override
+    protected void onPostResume() {
+        checkConnectivity(this);
+        super.onPostResume();
     }
 
     @Override
@@ -127,9 +230,7 @@ public class BlogActivity extends AppCompatActivity {
             protected void populateViewHolder(final BlogViewHolder viewHolder, final Blog model, final int position) {
 
 
-
                 final String post_key = getRef(position).getKey();
-
 
 
                 if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(model.getUid())) {
@@ -139,8 +240,6 @@ public class BlogActivity extends AppCompatActivity {
                 } else {
                     viewHolder.deleteIcon.setVisibility(View.INVISIBLE);
                 }
-
-
 
 
                 viewHolder.setTitle(model.getTitle());
@@ -210,6 +309,7 @@ public class BlogActivity extends AppCompatActivity {
         builder.setTitle("Delete Blog");
         builder.setMessage("Are you sure you want to delete this blog?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            //
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -221,21 +321,21 @@ public class BlogActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        for(DataSnapshot singlesnapshot : dataSnapshot.getChildren()) {
+                        for (DataSnapshot singlesnapshot : dataSnapshot.getChildren()) {
 
-                             String key = singlesnapshot.getKey();
+                            String key = singlesnapshot.getKey();
 
                             Log.e("BlogActivity", "onDataChange: Model UID: " + model.getUid());
                             Log.e("BlogActivity", "onDataChange: Model title: " + model.getTitle());
                             Log.e("BlogActivity", "onDataChange: Model desc: " + model.getDesc());
 
-                             if (model.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                     && model.getTitle().equals(singlesnapshot.getValue(Blog.class).getTitle())
-                                     && model.getDesc().equals(singlesnapshot.getValue(Blog.class).getDesc())) {
+                            if (model.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    && model.getTitle().equals(singlesnapshot.getValue(Blog.class).getTitle())
+                                    && model.getDesc().equals(singlesnapshot.getValue(Blog.class).getDesc())) {
 
-                                 FirebaseDatabase.getInstance().getReference().child("Blog").child(key).removeValue();
+                                FirebaseDatabase.getInstance().getReference().child("Blog").child(key).removeValue();
 
-                             }
+                            }
 
                         }
 
@@ -273,70 +373,19 @@ public class BlogActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume() {
-        checkConnectivity(this);
-        super.onPostResume();
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-
-
-        return true;
-    }
-
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
+        if (actionBarDrawerToggle.onOptionsItemSelected(item))
+            return true;
 
-        if(item.getItemId() == R.id.main_logout_btn){
-
-            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
-
-            FirebaseAuth.getInstance().signOut();
-            sendToStart();
-
-        }
-
-        if(item.getItemId() == R.id.main_settings_btn){
-
-            Intent settingsIntent = new Intent(BlogActivity.this, SettingsActivity.class);
-            startActivity(settingsIntent);
-
-        }
-
-        if(item.getItemId() == R.id.main_all_btn){
-
-            Intent settingsIntent = new Intent(BlogActivity.this, UsersActivity.class);
-            startActivity(settingsIntent);
-
-        }
-
-        if (item.getItemId() == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
-    private void sendToStart() {
-
-        Intent startIntent = new Intent(BlogActivity.this, StartActivity.class);
-        startActivity(startIntent);
-        finish();
-
-    }
-
-    public static class BlogViewHolder extends RecyclerView.ViewHolder{
+    public static class BlogViewHolder extends RecyclerView.ViewHolder {
 
         View mview;
-        TextView post_uname,post_date,liketext, post_title, post_desc;
+        TextView post_uname, post_date, liketext, post_title, post_desc;
 
         ImageButton mLikebtn;
         ImageView deleteIcon;
@@ -346,22 +395,22 @@ public class BlogActivity extends AppCompatActivity {
 
         public BlogViewHolder(View itemView) {
             super(itemView);
-            mview=itemView;
+            mview = itemView;
 
 
-            mDatabaseLike=FirebaseDatabase.getInstance().getReference().child("Like");
-            mAuth=FirebaseAuth.getInstance();
+            mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Like");
+            mAuth = FirebaseAuth.getInstance();
             mDatabaseLike.keepSynced(true);
 
-            mLikebtn=(ImageButton)mview.findViewById(R.id.likeimg);
-            liketext=(TextView)mview.findViewById(R.id.liketext);
-            post_title=(TextView)mview.findViewById(R.id.post_title);
-            post_desc=(TextView)mview.findViewById(R.id.post_desc);
+            mLikebtn = (ImageButton) mview.findViewById(R.id.likeimg);
+            liketext = (TextView) mview.findViewById(R.id.liketext);
+            post_title = (TextView) mview.findViewById(R.id.post_title);
+            post_desc = (TextView) mview.findViewById(R.id.post_desc);
 
             deleteIcon = mview.findViewById(R.id.delete_icon);
 
-            post_uname= (TextView) mview.findViewById(R.id.post_uname);
-            post_date= (TextView) mview.findViewById(R.id.post_date);
+            post_uname = (TextView) mview.findViewById(R.id.post_uname);
+            post_date = (TextView) mview.findViewById(R.id.post_date);
 
             post_uname.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -379,14 +428,33 @@ public class BlogActivity extends AppCompatActivity {
 
         }
 
-        public void setLikeBtn(final String post_key){
+        //
+        public void setDate(String date) {
+
+            //TextView post_date=(TextView)mview.findViewById(R.id.post_date);
+
+            post_date.setText(date);
+        }
+
+        public void setDesc(String desc) {
+            //  TextView post_title=(TextView)mview.findViewById(R.id.post_desc);
+            post_desc.setText(desc);
+        }
+
+        public void setImage(Context ctx, String image) {
+            ImageView post_image = (ImageView) mview.findViewById(R.id.post_image);
+            Picasso.with(ctx).load(image).into(post_image);
+
+        }
+
+        public void setLikeBtn(final String post_key) {
             mDatabaseLike.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())){
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
                         mLikebtn.setImageResource(R.drawable.ic_action_like_n);
                         liketext.setText("Dislike");
-                    }else{
+                    } else {
                         mLikebtn.setImageResource(R.drawable.ic_action_like);
                         liketext.setText("Like");
                     }
@@ -399,39 +467,21 @@ public class BlogActivity extends AppCompatActivity {
             });
         }
 
-        public void setTitle(String title){
-           // TextView post_title=(TextView)mview.findViewById(R.id.post_title);
+        public void setTitle(String title) {
+            // TextView post_title=(TextView)mview.findViewById(R.id.post_title);
             post_title.setText(title);
         }
 
-
-        public void setDesc(String desc){
-          //  TextView post_title=(TextView)mview.findViewById(R.id.post_desc);
-            post_desc.setText(desc);
-        }
-
-        public void setImage(Context ctx, String image){
-            ImageView post_image=(ImageView)mview.findViewById(R.id.post_image);
-            Picasso.with(ctx).load(image).into(post_image);
-
-        }
-
-        public void setUsername(String uname){
+        public void setUsername(String uname) {
             //TextView post_uname=(TextView)mview.findViewById(R.id.post_uname);
             post_uname.setText(uname);
         }
-
-        public void setDate(String date){
-
-            //TextView post_date=(TextView)mview.findViewById(R.id.post_date);
-
-            post_date.setText(date);
-        }
     }
 
-    public void checkConnectivity(Context context){
-        if(!Utility.isOnline(this)){
-            Snackbar snackbar=Snackbar.make(findViewById(R.id.drawer),"No internet connection",Snackbar.LENGTH_INDEFINITE)
+    //
+    public void checkConnectivity(Context context) {
+        if (!Utility.isOnline(this)) {
+            Snackbar snackbar = Snackbar.make(findViewById(R.id.drawer), "No internet connection", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Retry", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
