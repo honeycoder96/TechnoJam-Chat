@@ -30,7 +30,6 @@ import com.squareup.picasso.Picasso;
 import tech.honeysharma.techbmechat.Blog.BlogActivity;
 import tech.honeysharma.techbmechat.Chat.UsersActivity;
 import tech.honeysharma.techbmechat.R;
-import tech.honeysharma.techbmechat.Utility.Utility;
 
 public class MainActivity extends AppCompatActivity {
 
