@@ -126,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
         Snackbar snack = Snackbar.make(parentLayout, error, Snackbar.LENGTH_LONG);
         View snackbarView = snack.getView();
         FrameLayout.LayoutParams params =(FrameLayout.LayoutParams) snackbarView.getLayoutParams();
-        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+        params.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
         snackbarView.setLayoutParams(params);
         TextView textView = snackbarView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setMaxLines(5);
