@@ -84,29 +84,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+
+        //toolbar
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("TechnoJam");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         //Tabs
         mViewPager = (ViewPager) findViewById(R.id.main_tabPager);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
         mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
 
+
+        //Navigation Drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.activity_main);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.Open, R.string.Close);
-
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         navigationView = findViewById(R.id.nv);
+
         View view = navigationView.inflateHeaderView(R.layout.nav_header);
         tvuserName = view.findViewById(R.id.tv_user_name);
         ivUserImage = view.findViewById(R.id.iv_user_image);
@@ -137,10 +138,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id) {
+
                     case R.id.blog_btn:
                         Intent blogIntent = new Intent(MainActivity.this, BlogActivity.class);
                         startActivity(blogIntent);
                         break;
+
                     case R.id.main_logout_btn:
                         mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
 

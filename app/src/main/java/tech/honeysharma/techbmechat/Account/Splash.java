@@ -23,7 +23,7 @@ public class Splash extends AppCompatActivity {
                 try {
                     Thread.sleep(3000);
                 } catch (Exception e) {}
-                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent=new Intent(getApplicationContext(),BlogActivity.class);
                 startActivity(intent);
                 finish();
             }

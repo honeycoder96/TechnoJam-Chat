@@ -5,6 +5,10 @@
         android:title="Events" />
 
     <item
+        android:id="@+id/chat_btn"
+        android:title="Social" />
+
+    <item
         android:id="@+id/main_settings_btn"
         android:title="Account Settings" />
     <item

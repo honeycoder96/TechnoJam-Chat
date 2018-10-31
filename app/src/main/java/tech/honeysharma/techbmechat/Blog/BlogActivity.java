@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import tech.honeysharma.techbmechat.Account.MainActivity;
 import tech.honeysharma.techbmechat.Account.SettingsActivity;
 import tech.honeysharma.techbmechat.Account.StartActivity;
 import tech.honeysharma.techbmechat.Chat.UsersActivity;
@@ -40,7 +41,7 @@ public class BlogActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private DatabaseReference mUserRef;
     private FirebaseAuth auth;
-    private TabLayout tabLayout;
+    private TabLayout mTabLayout;
     private ViewPager viewPager;
     private CustomFragmentPagerAdapter mAdapter;
 
@@ -83,23 +84,32 @@ public class BlogActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+
+        //toolbar
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("TechnoJam Chat");
-
+        getSupportActionBar().setTitle("TechnoJam");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+
+        //tab layout
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.main_tabs1);
+        mAdapter = new CustomFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(mAdapter);
+        mTabLayout.setupWithViewPager(viewPager);
+
+
+        //Navigation drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.activity_main);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.Open, R.string.Close);
-
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.Open, R.string.Close);
         actionBarDrawerToggle.syncState();
-
         navigationView = findViewById(R.id.nv);
         View view = navigationView.inflateHeaderView(R.layout.nav_header);
         tvuserName = view.findViewById(R.id.tv_user_name);
         ivUserImage = view.findViewById(R.id.iv_user_image);
-
 
         setNavigationDrawer();
 
@@ -130,6 +140,13 @@ public class BlogActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id) {
+
+                    case R.id.chat_btn:
+
+                        Intent mainIntent = new Intent(BlogActivity.this, MainActivity.class);
+                        startActivity(mainIntent);
+                        break;
+
                     case R.id.main_logout_btn:
                         mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
 
